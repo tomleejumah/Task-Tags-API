@@ -116,5 +116,3 @@ GET /api/tasks?completed=false&tags=urgent,important
 Tomlee
 tommlyjumah@gmail.com
 ```
-
-Would you like me to elaborate on any section of the README or provide additional details specific to your implementation?
