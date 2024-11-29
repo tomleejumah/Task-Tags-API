@@ -1,5 +1,6 @@
 package com.example.taskmanagement.Repository;
 
+import com.example.taskmanagement.DTO.TagDTO;
 import com.example.taskmanagement.Model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,7 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
 
     @Query("SELECT t FROM Task t WHERE t.completed = :isCompleted")
     List<Task> findAllByCompleted(@Param("isCompleted") boolean isCompleted);
+
+
+
 }
