@@ -1,6 +1,7 @@
 package com.example.taskmanagement.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,8 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateCreated;
 
 }

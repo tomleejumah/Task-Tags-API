@@ -46,10 +46,6 @@ public interface TagRepository extends JpaRepository<Tag,Long> {
     @Query(value = "SELECT task_id FROM task_tag WHERE tag_id = :tagId", nativeQuery = true)
     List<Long> findTaskIdsByTagId(@Param("tagId") Long tagId);
 
-    @Query("SELECT new com.example.dto.TagDTO(t.id, t.name, COUNT(tt)) " +
-            "FROM Tag t LEFT JOIN t.tasks tt " +
-            "WHERE t.dateCreated = :dateCreated " +
-            "GROUP BY t.id, t.name")
-    List<TagDTO> findTagsByDateCreated(@Param("dateCreated") LocalDate dateCreated);
-
+    @Query("SELECT t FROM Tag t WHERE t.dateCreated = :dateCreated")
+    List<Tag> findTagsByDateCreated(@Param("dateCreated") LocalDate dateCreated);
 }

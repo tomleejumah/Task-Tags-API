@@ -81,7 +81,7 @@ public class TagService {
 
         for (Tag tag : tags) {
             int taskCount = getTaskCountForTag(tag.getId());
-            tagWithTaskCounts.add(new TagDTO(tag.getId(), tag.getName(), (long) taskCount));
+            tagWithTaskCounts.add(new TagDTO(tag.getId(), tag.getName(), (long) taskCount, tag.getDateCreated()));
         }
 
         return tagWithTaskCounts;
@@ -143,11 +143,12 @@ public class TagService {
         return tagRepository.findTaskIdsByTagId(tagId);
     }
 
-    public List<TagDTO> getAllTagsOrByFilterDateCreated(LocalDate dateCreated) {
+    public ResponseEntity<?> getAllTagsOrByFilterDateCreated(LocalDate dateCreated) {
         if (dateCreated == null) {
-            return getTagsWithTaskCounts();
+            return ResponseHandler.ResponseBuilder("All tags with task count",
+                    HttpStatus.OK,getTagsWithTaskCounts());
+        }else {
+           return ResponseHandler.ResponseBuilder("Filtered by date",HttpStatus.OK, tagRepository.findTagsByDateCreated(dateCreated));
         }
-        return tagRepository.findTagsByDateCreated(dateCreated);
-
     }
 }

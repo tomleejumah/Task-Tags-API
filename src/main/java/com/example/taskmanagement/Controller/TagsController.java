@@ -90,7 +90,7 @@ public class TagsController {
     @ApiResponse(responseCode = "200", description = "operation successful",
             content = @Content(schema = @Schema(implementation = List.class, type = "array")))
    @GetMapping()
-    public List<TagDTO> getAllTags(@RequestParam(required = false)
+    public ResponseEntity<?> getAllTags(@RequestParam(required = false)
                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateCreated) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         auditLogService.log("Tag", "READ", username, "Retrieved all tags");
@@ -108,11 +108,13 @@ public class TagsController {
      * */
     @Operation(summary = "Deletes a tag by its ID", description = "Returns success message")
     @ApiResponse(responseCode = "200", description = "operation successful")
-    @DeleteMapping("/delete/{tagId")
+    @DeleteMapping("/delete/{tagId}")
     public ResponseEntity<?> deleteTag(@PathVariable("tagId") Long tagId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         auditLogService.log("Tag", "DELETE", username, "Deleted tag with id: " + tagId);
         return tagService.deleteTag(tagId);
 //        return ResponseHandler.ResponseBuilder("success",HttpStatus.OK);
     }
+
+
 }
