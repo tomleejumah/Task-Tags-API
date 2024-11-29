@@ -94,10 +94,10 @@ Support filtering by:
 - Tags
 - Creation date
 
-Example Request:
+<!-- Example Request:
 ```bash
 GET /api/tasks?completed=false&tags=urgent,important
-```
+``` -->
 
 ## Error Handling
 ~Used GlobalException Handling with the following classes
