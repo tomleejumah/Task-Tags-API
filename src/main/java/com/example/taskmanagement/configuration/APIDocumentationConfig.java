@@ -10,8 +10,22 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for configuring the OpenAPI documentation for the Task and Tags API.
+ * It provides information about the API, such as title, version, description, terms of service,
+ * license, and contact details.
+ *
+ * @author API Support Tomlee
+ * @version 1.0
+ */
 @Configuration
 public class APIDocumentationConfig {
+
+    /**
+     * This method creates and returns an instance of OpenAPI with the configured API information.
+     *
+     * @return An instance of OpenAPI with the configured API information.
+     */
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
@@ -27,13 +41,6 @@ public class APIDocumentationConfig {
                                 .name("API Support Tomlee")
                                 .url("https://github.com/tomleejumah")
                                 .email("tommlyjumah@gmail.com"))
-
-
-
                 );
-//                .addServersItem(new Server()
-//                        .url("http://localhost:8085")
-//                        .description("Local development server"));
     }
-//    http://localhost:8085/swagger-ui/index.html
 }

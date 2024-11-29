@@ -41,7 +41,6 @@ public class TagsController {
      * Service for handling audit logs.
      */
     private AuditLogService auditLogService;
-
     /**
      * Service for handling tag operations.
      */
@@ -93,5 +92,21 @@ public class TagsController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         auditLogService.log("Tag", "READ", username, "Retrieved all tags");
         return tagService.getTagsWithTaskCounts();
+    }
+
+    /**
+     * Deletes a tag by its ID.
+     *
+     * @param tagId The ID of the tag to be deleted.
+     * @return ResponseEntity containing success message.
+     * */
+    @Operation(summary = "Deletes a tag by its ID", description = "Returns success message")
+    @ApiResponse(responseCode = "200", description = "operation successful")
+    @DeleteMapping("/delete/{tagId")
+    public ResponseEntity<?> deleteTag(@PathVariable("tagId") Long tagId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        auditLogService.log("Tag", "DELETE", username, "Deleted tag with id: " + tagId);
+        return tagService.deleteTag(tagId);
+//        return ResponseHandler.ResponseBuilder("success",HttpStatus.OK);
     }
 }

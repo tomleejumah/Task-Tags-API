@@ -87,6 +87,33 @@ public class TagService {
     }
 
     /**
+     * Deletes a Tag from the database by its ID without affecting associated Tasks.
+     *
+     * @param tagId The ID of the Tag to be deleted.
+     * @return A ResponseEntity containing the HTTP status code and a message indicating the success or failure of the operation.
+     */
+    @Transactional
+    public ResponseEntity<?> deleteTag(Long tagId) {
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new RuntimeException("Tag not found with ID: " + tagId));
+
+        // Disassociate tasks from the tag
+        List<Task> tasks = taskRepository.findAllById(getTaskIdsForTag(tagId));
+        for (Task task : tasks) {
+            task.getTags().remove(tag);
+            taskRepository.save(task);
+        }
+
+        tagRepository.delete(tag);
+
+        return ResponseHandler.ResponseBuilder(
+                "Tag deleted successfully without affecting associated tasks",
+                HttpStatus.OK
+        );
+    }
+
+
+    /**
      * Retrieves all Tags from the database.
      *
      * @return A list of Tag objects.
