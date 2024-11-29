@@ -45,22 +45,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                     .anyRequest().permitAll()
             )
             // Enable HTTP Basic authentication
-            .httpBasic(Customizer.withDefaults())
-            // Define exception handling for authentication entry points
-//            .exceptionHandling(exception -> exception
-//                    .authenticationEntryPoint((request, response, exception1) -> {
-//                        // Set response status to unauthorized
-//                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                        // Set response content type to JSON
-//                        response.setContentType("application/json");
-//                        // Write JSON response message
-//                        response.getWriter().write("{\"message\":\"Authentication failed,Unauthorised\"}");
-//                        // Flush and close the response writer
-//                        response.getWriter().flush();
-//                        response.getWriter().close();
-//                    }
-//                    )
-            ;
+            .httpBasic(Customizer.withDefaults());
 
     // Build and return the SecurityFilterChain
     return http.build();

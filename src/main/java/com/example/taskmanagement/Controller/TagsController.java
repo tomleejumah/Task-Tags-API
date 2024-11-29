@@ -16,11 +16,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +43,6 @@ public class TagsController {
      * Service for handling audit logs.
      */
     private AuditLogService auditLogService;
-
     /**
      * Service for handling tag operations.
      */
@@ -88,10 +89,30 @@ public class TagsController {
     @Operation(summary = "Retrieves all tags with their tasks", description = "Returns list of tags with tasks")
     @ApiResponse(responseCode = "200", description = "operation successful",
             content = @Content(schema = @Schema(implementation = List.class, type = "array")))
-    @GetMapping("/all")
-    public List<TagDTO> getAllTags() {
+   @GetMapping()
+    public List<TagDTO> getAllTags(@RequestParam(required = false)
+                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateCreated) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         auditLogService.log("Tag", "READ", username, "Retrieved all tags");
-        return tagService.getTagsWithTaskCounts();
+
+        return tagService.getAllTagsOrByFilterDateCreated(dateCreated);
+    }
+
+
+
+    /**
+     * Deletes a tag by its ID.
+     *
+     * @param tagId The ID of the tag to be deleted.
+     * @return ResponseEntity containing success message.
+     * */
+    @Operation(summary = "Deletes a tag by its ID", description = "Returns success message")
+    @ApiResponse(responseCode = "200", description = "operation successful")
+    @DeleteMapping("/delete/{tagId")
+    public ResponseEntity<?> deleteTag(@PathVariable("tagId") Long tagId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        auditLogService.log("Tag", "DELETE", username, "Deleted tag with id: " + tagId);
+        return tagService.deleteTag(tagId);
+//        return ResponseHandler.ResponseBuilder("success",HttpStatus.OK);
     }
 }
