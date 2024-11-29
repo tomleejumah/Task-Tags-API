@@ -17,6 +17,10 @@ This is a Spring Boot-based REST API for managing tasks and tags, providing comp
 - **Database**: MySQL/H2
 - **ORM**: Spring Data JPA
 - **Documentation**: Swagger
+- **Basic Auth implementation**  : only authenticated users can access the api
+  **username** : 'username'
+  **password** : 'password'
+-**Audit Logs** : 'for tracking purposes'  
 
 ## Prerequisites
 - Java 17+
