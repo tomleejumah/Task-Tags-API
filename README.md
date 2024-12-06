@@ -81,7 +81,7 @@ mvn spring-boot:run
 - `POST /tags/create/`: Create a new tag
 - `GET /tags`: Retrieve all tags with tasks assciated count
 - `GET tags/{id}`: Get tag with ID
-- `GET /tags/{id}/tasks`: Get tag and associated tasks
+- `GET /tags/{id}`: Get tag and associated tasks
 - `GET /tags?dateCreated="date"`:Filter tag with date created
 
 ## Swagger Documentation
