@@ -10,6 +10,9 @@ This is a Spring Boot-based REST API for managing tasks and tags, providing comp
 - Detailed tag management
 - Global error handling
 - Swagger API documentation
+- Basic Auth implementation 
+  **username** : 'username'
+  **password** : 'password'
 
 ## Technical Stack
 - **Language**: Java

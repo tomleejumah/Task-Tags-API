@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -113,7 +114,6 @@ public class TagsController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         auditLogService.log("Tag", "DELETE", username, "Deleted tag with id: " + tagId);
         return tagService.deleteTag(tagId);
-//        return ResponseHandler.ResponseBuilder("success",HttpStatus.OK);
     }
 
 

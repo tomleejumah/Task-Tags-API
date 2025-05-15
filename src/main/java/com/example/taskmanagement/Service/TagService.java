@@ -6,12 +6,15 @@ import com.example.taskmanagement.Model.Tag;
 import com.example.taskmanagement.Model.Task;
 import com.example.taskmanagement.Repository.TagRepository;
 import com.example.taskmanagement.Repository.TaskRepository;
+import com.example.taskmanagement.exception.types.ResourceNotFoundException;
+import com.example.taskmanagement.exception.types.ValidationException;
 import com.example.taskmanagement.response.ResponseHandler;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -61,7 +64,7 @@ public class TagService {
     @Transactional
     public TagWithTasksDTO getTagWithTasks(Long tagId) {
         Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new RuntimeException("Tag not found with ID: " + tagId));
+                .orElseThrow(() -> new ResourceNotFoundException("Tag not found with ID: " + tagId));
 
         List<Long> taskIds = getTaskIdsForTag(tagId);
         List<Task> tasks = taskRepository.findAllById(taskIds);
