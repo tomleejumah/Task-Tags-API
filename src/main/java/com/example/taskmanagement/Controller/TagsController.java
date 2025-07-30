@@ -1,31 +1,36 @@
 package com.example.taskmanagement.Controller;
 
-import com.example.taskmanagement.DTO.TagDTO;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.taskmanagement.DTO.TagWithTasksDTO;
 import com.example.taskmanagement.Model.Tag;
 import com.example.taskmanagement.Model.Task;
-import com.example.taskmanagement.Repository.TaskRepository;
 import com.example.taskmanagement.Service.AuditLogService;
 import com.example.taskmanagement.Service.TagService;
-import com.example.taskmanagement.Service.TaskService;
 import com.example.taskmanagement.response.ResponseHandler;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -115,6 +120,4 @@ public class TagsController {
         auditLogService.log("Tag", "DELETE", username, "Deleted tag with id: " + tagId);
         return tagService.deleteTag(tagId);
     }
-
-
 }
