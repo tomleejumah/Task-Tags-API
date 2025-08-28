@@ -1,5 +1,10 @@
 package com.example.taskmanagement.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import com.example.taskmanagement.DTO.TagDTO;
 import com.example.taskmanagement.DTO.TagWithTasksDTO;
 import com.example.taskmanagement.Model.Tag;
@@ -7,23 +12,14 @@ import com.example.taskmanagement.Model.Task;
 import com.example.taskmanagement.Repository.TagRepository;
 import com.example.taskmanagement.Repository.TaskRepository;
 import com.example.taskmanagement.exception.types.ResourceNotFoundException;
-import com.example.taskmanagement.exception.types.ValidationException;
 import com.example.taskmanagement.response.ResponseHandler;
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
 /**
  * This class provides services related to Tag operations.
@@ -33,9 +29,9 @@ import java.util.stream.Collectors;
 @Service
 public class TagService {
 
-    private TaskService taskService;
-    private TagRepository tagRepository;
-    private TaskRepository taskRepository;
+    private final TaskService taskService;
+    private final TagRepository tagRepository;
+    private final TaskRepository taskRepository;
 
     /**
      * Creates a new Tag in the database.
@@ -45,12 +41,12 @@ public class TagService {
      *         If successful, it also includes the created Tag objects.
      */
     @Transactional
-    public ResponseEntity<?> createTag(Set<Tag> tag) {
+    public ResponseEntity<?> createTag(final Set<Tag> tag) {
 
         if (tag.isEmpty()) {
             return ResponseHandler.ResponseBuilder("Please provide at least one tag", HttpStatus.BAD_REQUEST);
         }
-        Set<Tag> processedTag = taskService.processedTag(tag);
+        final Set<Tag> processedTag = taskService.processedTag(tag);
         return ResponseHandler.ResponseBuilder("Tag Created successfully", HttpStatus.CREATED, processedTag);
     }
 
@@ -62,12 +58,12 @@ public class TagService {
      * @throws RuntimeException If the Tag with the given ID is not found.
      */
     @Transactional
-    public TagWithTasksDTO getTagWithTasks(Long tagId) {
-        Tag tag = tagRepository.findById(tagId)
+    public TagWithTasksDTO getTagWithTasks(final Long tagId) {
+        final Tag tag = tagRepository.findById(tagId)
                 .orElseThrow(() -> new ResourceNotFoundException("Tag not found with ID: " + tagId));
 
-        List<Long> taskIds = getTaskIdsForTag(tagId);
-        List<Task> tasks = taskRepository.findAllById(taskIds);
+        final List<Long> taskIds = getTaskIdsForTag(tagId);
+        final List<Task> tasks = taskRepository.findAllById(taskIds);
 
         return new TagWithTasksDTO(tag.getId(), tag.getName(), tasks);
     }
@@ -79,11 +75,11 @@ public class TagService {
      */
     @Transactional
     public List<TagDTO> getTagsWithTaskCounts() {
-        List<Tag> tags = getAllTags();
-        List<TagDTO> tagWithTaskCounts = new ArrayList<>();
+        final List<Tag> tags = getAllTags();
+        final List<TagDTO> tagWithTaskCounts = new ArrayList<>();
 
-        for (Tag tag : tags) {
-            int taskCount = getTaskCountForTag(tag.getId());
+        for (final Tag tag : tags) {
+            final int taskCount = getTaskCountForTag(tag.getId());
             tagWithTaskCounts.add(new TagDTO(tag.getId(), tag.getName(), (long) taskCount, tag.getDateCreated()));
         }
 
@@ -97,13 +93,13 @@ public class TagService {
      * @return A ResponseEntity containing the HTTP status code and a message indicating the success or failure of the operation.
      */
     @Transactional
-    public ResponseEntity<?> deleteTag(Long tagId) {
-        Tag tag = tagRepository.findById(tagId)
+    public ResponseEntity<?> deleteTag(final Long tagId) {
+        final Tag tag = tagRepository.findById(tagId)
                 .orElseThrow(() -> new RuntimeException("Tag not found with ID: " + tagId));
 
         // Disassociate tasks from the tag
-        List<Task> tasks = taskRepository.findAllById(getTaskIdsForTag(tagId));
-        for (Task task : tasks) {
+        final List<Task> tasks = taskRepository.findAllById(getTaskIdsForTag(tagId));
+        for (final Task task : tasks) {
             task.getTags().remove(tag);
             taskRepository.save(task);
         }
@@ -132,7 +128,7 @@ public class TagService {
      * @param tagId The ID of the Tag.
      * @return The count of Tasks associated with the Tag.
      */
-    public int getTaskCountForTag(Long tagId) {
+    public int getTaskCountForTag(final Long tagId) {
         return tagRepository.countTasksByTagId(tagId);
     }
 
@@ -142,11 +138,11 @@ public class TagService {
      * @param tagId The ID of the Tag.
      * @return A list of Task IDs associated with the Tag.
      */
-    public List<Long> getTaskIdsForTag(Long tagId) {
+    public List<Long> getTaskIdsForTag(final Long tagId) {
         return tagRepository.findTaskIdsByTagId(tagId);
     }
 
-    public ResponseEntity<?> getAllTagsOrByFilterDateCreated(LocalDate dateCreated) {
+    public ResponseEntity<?> getAllTagsOrByFilterDateCreated(final LocalDate dateCreated) {
         if (dateCreated == null) {
             return ResponseHandler.ResponseBuilder("All tags with task count",
                     HttpStatus.OK,getTagsWithTaskCounts());
